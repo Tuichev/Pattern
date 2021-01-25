@@ -5,32 +5,7 @@
 import UIKit
 
 extension UIViewController {
-    func blockScreenViewStart(flag: Bool) {
-        
-        DispatchQueue.main.async {
-            guard let currentWindow = UIApplication.shared.keyWindow else { return }
-            let tag = TagsGlobalViews.blockScreen.rawValue
-            
-            for subview in currentWindow.subviews where subview.tag == tag {
-                guard let blv: BlockUILoadingView = subview as? BlockUILoadingView else {
-                    subview.removeFromSuperview()
-                    return
-                }
-                
-                blv.dismissView()
-                break
-            }
-            
-            guard flag else { return }
-            
-            let blview: BlockUILoadingView = .fromNib()
-            blview.frame = UIScreen.main.bounds
-            blview.tag = tag
-            blview.activityIndicator.color = UIColor.appColor(.white)
-            currentWindow.addSubview(blview)
-        }
-    }
-    
+
     func inBlockScreenViewStart(flag: Bool) {
         DispatchQueue.main.async {
             

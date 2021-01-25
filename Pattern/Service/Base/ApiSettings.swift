@@ -26,10 +26,6 @@ class ApiSettings {
     
     init() {}
     
-    func removeObject(key: String) {
-        currentDefaults.removeObject(forKey: key)
-    }
-    
     var token: String? {
         return ProfileStorage.token
     }

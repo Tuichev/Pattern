@@ -29,16 +29,15 @@ struct CustomError: CustomErrorProtocol {
 
 class HttpService {
     
-    private let userDefaults = UserDefaultsManager()
     private static let queueQos: DispatchQueue = DispatchQueue(label: "com.queueDefault", qos: .default, attributes: [.concurrent])
     
-    func checkInternetConnect() -> Bool {
-        return InternetService.shared.checkInternetConnect()
-    }
+//    func checkInternetConnect() -> Bool {
+//        return InternetService.shared.checkInternetConnect()
+//    }
     
-    func internetConnectErr() -> CustomError {
-        return CustomError(localizedDescription: StringValue.Base.kNoInternetConnection.localized, code: 404)
-    }
+//    func internetConnectErr() -> CustomError {
+//        return CustomError(localizedDescription: StringValue.Base.kNoInternetConnection.localized, code: 404)
+//    }
 }
 
 extension HttpService {
@@ -55,16 +54,13 @@ extension HttpService {
                  headers: HTTPHeaders? = nil,
                  resp: @escaping IdResponseBlock) {
         
-        let tokenValue = userDefaults.token ?? "MHGxDqa2VzhX2d4KPkYdZrAKBAeADxGr"
+        let tokenValue = ProfileStorage.token ?? "MHGxDqa2VzhX2d4KPkYdZrAKBAeADxGr"
         
         var headersForQuery: HTTPHeaders = headers ?? [:]
         
         if !tokenValue.isEmpty {
-            headersForQuery[Keys.autorithationToken] = tokenValue
+            headersForQuery[Keys.token] = tokenValue
         }
-        
-        headersForQuery[Keys.appVersion] = 1.0.description
-        headersForQuery[Keys.language] = "uk"
         
         return query(url,
                      method: method,
@@ -103,12 +99,12 @@ extension HttpService {
         
         
         
-        if !checkInternetConnect() {
-            DispatchQueue.main.async {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-            }
-            return resp(.failure(internetConnectErr()))
-        }
+//        if !checkInternetConnect() {
+//            DispatchQueue.main.async {
+//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+//            }
+//            return resp(.failure(internetConnectErr()))
+//        }
         
         DispatchQueue.main.async {
             UIApplication.shared.isNetworkActivityIndicatorVisible = true
@@ -135,21 +131,18 @@ extension HttpService {
                         encoding: ParameterEncoding = URLEncoding.default,
                         resp: @escaping IdResponseBlock) {
         
-        if !checkInternetConnect() {
-            DispatchQueue.main.async {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-            }
-            return resp(.failure(internetConnectErr()))
-        }
-        
-        let tokenValue = userDefaults.token ?? "MHGxDqa2VzhX2d4KPkYdZrAKBAeADxGr"
-        let token = BaseRequests.prefix + tokenValue
+//        if !checkInternetConnect() {
+//            DispatchQueue.main.async {
+//                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+//            }
+//            return resp(.failure(internetConnectErr()))
+//        }
         
         var headersForQuery: HTTPHeaders = headers ?? [:]
         
-        if !tokenValue.isEmpty {
-            headersForQuery[Keys.autorithationToken] = token
-        }
+//        if !tokenValue.isEmpty {
+//            headersForQuery[Keys.autorithationToken] = token
+//        }
         
         DispatchQueue.main.async {
             UIApplication.shared.isNetworkActivityIndicatorVisible = true
@@ -193,11 +186,7 @@ extension HttpService {
         
         let statusCode = response.response?.statusCode ?? 0
         
-        if statusCode == 403 {
-            DispatchQueue.main.async {
-                self.logout()
-            }
-        }
+       
         switch response.result {
         case .success(let value):
             return respCompletion(.success(value))
@@ -205,18 +194,6 @@ extension HttpService {
             let customError = CustomError(localizedDescription: error.localizedDescription, code: statusCode)
             respCompletion(.failure(customError))
         }
-    }
-    
-    func logout() {
-        // If the application is opened by pressing on push notification, you do not need to change the main controller
-        let navigationController = UINavigationController()
-        let authorizationVC = LoginViewController.instance(.authorization)
-        navigationController.navigationBar.isHidden = true
-        navigationController.interactivePopGestureRecognizer?.isEnabled = false //disable back swipe
-        navigationController.viewControllers = [authorizationVC]
-        UserDefaultsManager().isUserLoggedIn = false
-        
-        UIApplication.shared.keyWindow?.rootViewController = navigationController
     }
 }
 

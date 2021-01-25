@@ -88,17 +88,6 @@ extension UIApplication {
 }
 
 extension UIViewController {
-    class func instance(_ storyboard: UIStoryboard.Storyboard, screenType: ScreenType = .none) -> Self {
-        
-        let storyboard = UIStoryboard(storyboard: storyboard)
-        let viewController = storyboard.instantiateViewController(self)
-        
-        if var vc = viewController as? ScreenTypeViewControllerProtocol {
-            vc.screenType = screenType
-        }
-        
-        return viewController
-    }
     
     class var identifier: String {
         return String(describing: self)
@@ -122,7 +111,7 @@ extension UIViewController {
             let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
             
             if customActions.isEmpty {
-                alert.addAction(UIAlertAction(title: StringValues.Base.ok.localized, style: .default))
+                alert.addAction(UIAlertAction(title: "OK", style: .default))
             } else {
                 for action in customActions {
                     alert.addAction(action)
@@ -160,11 +149,11 @@ extension UIViewController {
     }
     
     func showErrorAlert(message: String) {
-        self.showAlert(title: StringValues.Base.errorAlertTitle.localized, message: message, completion: {})
+        self.showAlert(title: "Error", message: message, completion: {})
     }
     
     func showErrorAlert(message: String, completion: @escaping () -> Void) {
-        self.showAlert(title: StringValues.Base.errorAlertTitle.localized, message: message, completion: completion)
+        self.showAlert(title: "Error", message: message, completion: completion)
     }
     
     func showAlert(title: String?, message: String?, customActions: [UIAlertAction] = [], completion: @escaping () -> Void) {
@@ -173,7 +162,7 @@ extension UIViewController {
             let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
             
             if customActions.isEmpty {
-                alert.addAction(UIAlertAction(title: StringValues.Base.ok.localized, style: .default) { _ in completion() })
+                alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in completion() })
             } else {
                 for action in customActions {
                     alert.addAction(action)
@@ -198,7 +187,7 @@ extension UIViewController {
             delay = 0
         }
         
-        infoView(text: StringValues.Base.kNoInternetConnection.localized,
+        infoView(text: "NoInternetConnection",
                  isTapBar: isTapBar,
                  additionalOffset: additionalOffset,
                  duration: duration,
@@ -242,7 +231,7 @@ extension UIViewController {
             }, completion: {(_ finished: Bool) -> Void in
                 
                 infoViewInternetOff?.removeFromSuperview()
-                self.infoView(text: StringValues.Base.kInternetRestored.localized,
+                self.infoView(text: "InternetRestored",
                               isTapBar: isTapBar,
                               additionalOffset: additionalOffset,
                               duration: duration,

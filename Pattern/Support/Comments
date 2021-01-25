@@ -1,0 +1,13 @@
+//MARK: - #1 VCSettings
+We write there Structs and Enums that we use only for layout
+The entities connected with data should be in Data folder
+We should write this only in case when we have a reason
+
+//MARK: - #2 Router
+I think it will be good to use router class, but only in case
+when we have a reason for this
+
+//MARK: - #3 Repository
+Get this class from BLoC arch, the main idea is that we can
+choose/change the way to work with data/network and avoid changes in other classes.
+We should write this only in case when we have a reason

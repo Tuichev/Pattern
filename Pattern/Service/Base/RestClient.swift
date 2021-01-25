@@ -2,10 +2,13 @@
 //  RestClient.swift
 //
 
+import Foundation
+import Alamofire
+
 class RestClient: NSObject {
     
     let http = HttpService()
-    let baseUrl = BaseRequests.baseURL
+    let baseUrl = ApiSettings().serverBaseURL
     
     func response<P: Codable>(result: Result<Data, CustomError>, modelCls: P.Type, resp: @escaping (Result<P, CustomError>) -> Void) {
         
